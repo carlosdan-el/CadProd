@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/index.css"/>
+}
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-primary btn-new" role="button" asp-controller="Products" asp-action="Create">New Product</a>
+        </div>
+    </div>
+</div>
+<form class="row mb-3" action="">
+    <div class="col-sm-6">
+        <div class="input-group mt-2 mb-3">
+            <input type="text" placeholder="Search" class="form-control text-center pr-5" id="search-input" aria-describedby="basic-addon1">
+            <button class="btn btn-search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill-rule="evenodd" d="M14.53 15.59a8.25 8.25 0 111.06-1.06l5.69 5.69a.75.75 0 11-1.06 1.06l-5.69-5.69zM2.5 9.25a6.75 6.75 0 1111.74 4.547.746.746 0 00-.443.442A6.75 6.75 0 012.5 9.25z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <select class="form-control mt-2 mb-3">
+            <option selected>Categories</option>
+            <option>All</option>
+            <option>Drinks</option>
+            <option>Snacks</option>
+            <option>Desserts</option>
+            <option>Meals</option>
+        </select>
+    </div>
+</form>
+<div class="row mb-4">
+    <div class="col-sm-12">
+        <ul class="products-list">
+            <li class="card product-item">
+                <a class="p-2" href="/Products?id=123456">
+                    <img class="card-img-top" src="~/images/thumbs/71an9eiBxpL._AC_SL1500_.jpg"/>
+                </a>
+                <div class="card-body product-item-description">
+                    <a href="/Products?id=123456"><h5>Apple MacBook Pro</h5></a>
+                    <p>R$ 9.299,00</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
