@@ -13,6 +13,11 @@
     <div class="col-md-12">
         <form enctype="multipart/form-data" asp-action="OnPost" asp-anti-forgery="true" class="w-100 bg-white p-3 mt-3 border" method="post">
             <div class="form-row">
+                <div class="col-md-12">
+                    <div class="mb-2 ml-3" asp-validation-summary="All"></div>
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="Name" for="product-name">Name</label>
@@ -51,11 +56,10 @@
                     <div class="form-group">
                         <label asp-for="Size" for="product-size">Size</label>
                         <select asp-for="Size" id="product-size" class="form-control">
-                            <option selected>Choose...</option>
-                            <option>...</option>
+                            <option selected value = "">Choose...</option>
                         </select>
                         <small id="product-size" class="form-text text-muted">
-                        Don't find what you want? <a>create a new size</a>
+                        Don't find what you want? <a asp-controller="Sizes" asp-action="Create">create a new size</a>
                         </small>
                     </div>
                 </div>

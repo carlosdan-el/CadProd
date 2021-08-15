@@ -78,7 +78,7 @@ namespace Presentation.Controllers
                 }
 
                 type.CreatedBy = "169C551E-D350-4B14-8842-FC0DF70DFB12";
-                type.UpdatedBy = "169C551E-D350-4B14-8842-FC0DF70DFB12";
+                type.UpdatedBy = type.CreatedBy;
 
                 await _service.CreateProductType(type);
 

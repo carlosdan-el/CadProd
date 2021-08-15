@@ -28,6 +28,7 @@ namespace SimpleMVCProject
             services.AddScoped<ProductService>();
             services.AddScoped<ProductCategoryService>();
             services.AddScoped<ProductTypeService>();
+            services.AddScoped<ProductSizeService>();
 
             services.AddControllersWithViews();
         }
