@@ -1,6 +1,10 @@
 @model Presentation.Models.ProductModel
 
 <div class="row">
+    <div class="col-md-12" id="page-error-content">
+    </div>
+</div>
+<div class="row">
     <div class="col-md-12">
         <h1>New Product</h1>
     </div>
@@ -11,7 +15,7 @@
             <div class="form-row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="Name" for="exampleInputEmail1">Name</label>
+                        <label asp-for="Name" for="product-name">Name</label>
                         <input asp-for="Name" type="text" class="form-control" id="product-name"
                         aria-describedby="product-name" placeholder="Enter a product name">
                         <small id="product-name-help" class="form-text text-muted">
@@ -24,7 +28,6 @@
                         <label asp-for="Category" for="product-category">Category</label>
                         <select asp-for="Category" id="product-category" class="form-control">
                             <option selected>Choose...</option>
-                            <option>...</option>
                         </select>
                         <small id="product-category" class="form-text text-muted">
                         Don't find what you want? <a asp-controller="Categories" asp-action="Create">create a new category</a>
@@ -38,10 +41,9 @@
                         <label asp-for="Type" for="product-type">Type</label>
                         <select asp-for="Type" id="product-type" class="form-control">
                             <option selected>Choose...</option>
-                            <option>...</option>
                         </select>
                         <small id="product-type" class="form-text text-muted">
-                        Don't find what you want? <a href="#">create a new type</a>
+                        Don't find what you want? <a asp-controller="Types" asp-action="Create">create a new type</a>
                         </small>
                     </div>
                 </div>
@@ -80,9 +82,9 @@
             <div class="form-row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="Image" for="product-price">Image</label>
+                        <label asp-for="Image" for="product-image">Image</label>
                         <input asp-for="Image" type="file" class="form-control-file" id="product-image"
-                        aria-describedby="product-price"/>
+                        aria-describedby="product-image"/>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -103,7 +105,7 @@
                         <textarea asp-for="Description" class="form-control" id="product-description"
                         rows="3" max="5000"></textarea>
                         <small id="product-description" class="form-text text-muted">
-                        max: 5000 characters
+                        max: 500 characters
                         </small>
                     </div>
                 </div>
@@ -114,3 +116,7 @@
         </form>
     </div>
 </div>
+
+@section scripts{
+    <script src="~/js/category.js"></script>
+}

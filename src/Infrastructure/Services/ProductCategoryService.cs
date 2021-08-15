@@ -22,7 +22,7 @@ namespace Infrastructure.Services
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "";
+                string query = "SELECT * FROM tbProductCategory WITH (NOLOCK)";
                 var response = await connection.QueryAsync<ProductCategory>(query);
                 return response.ToList();
             }
@@ -43,7 +43,13 @@ namespace Infrastructure.Services
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "SPCreateCategory";
-                var response = await connection.ExecuteAsync(query, category,
+                var data = new {
+                    Name = category.Name,
+                    Description = category.Description,
+                    CreatedBy = category.CreatedBy,
+                    UpdatedBy = category.UpdatedBy
+                };
+                var response = await connection.ExecuteAsync(query, data,
                 commandType: CommandType.StoredProcedure);
                 return response;
             }

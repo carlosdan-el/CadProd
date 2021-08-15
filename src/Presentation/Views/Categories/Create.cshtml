@@ -1,4 +1,4 @@
-@model Presentation.Models.ProductModel
+@model Presentation.Models.CategoryModel
 
 <div class="row">
     <div class="col-md-12">
@@ -25,9 +25,9 @@
                     <div class="form-group">
                         <label asp-for="Description" for="category-description">Description</label>
                         <textarea asp-for="Description" class="form-control" id="category-description"
-                        rows="3" max="5000"></textarea>
+                        rows="3" maxlength="500"></textarea>
                         <small id="category-description-help" class="form-text text-muted">
-                        max: 5000 characters
+                        max: 500 characters
                         </small>
                     </div>
                 </div>

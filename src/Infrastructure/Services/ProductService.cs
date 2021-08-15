@@ -43,7 +43,19 @@ namespace Infrastructure.Services
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "SPCreateProduct";
-                var result = await connection.ExecuteAsync(query, product, 
+                var data = new {
+                    Name = product.Name,
+                    Description = product.Description,
+                    CategoryId = product.CategoryId,
+                    TypeId = product.TypeId,
+                    SizeId = product.SizeId,
+                    Price = product.Price,
+                    Tags = product.Tags,
+                    CreatedBy = "1",
+                    UpdatedBy = "1" 
+                };
+
+                var result = await connection.ExecuteAsync(query, data, 
                 commandType: CommandType.StoredProcedure);
                 return result;
             }

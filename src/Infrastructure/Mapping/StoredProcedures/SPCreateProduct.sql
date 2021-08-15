@@ -1,3 +1,5 @@
+USE CadProd
+
 CREATE PROCEDURE SPCreateProduct
 @Name VARCHAR(255),
 @Description VARCHAR(5000),
@@ -8,7 +10,6 @@ CREATE PROCEDURE SPCreateProduct
 @Tags VARCHAR(5000),
 @CreatedBy VARCHAR(36),
 @UpdatedBy VARCHAR(36)
-
 AS
 
 INSERT INTO tbProduct(Id, Name, Description, CategoryId, TypeId, SizeId, Price,

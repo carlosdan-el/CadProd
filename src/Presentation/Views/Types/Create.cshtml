@@ -1,0 +1,61 @@
+@model Presentation.Models.TypeModel
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>New Type</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form enctype="multipart/form-data" asp-action="OnPost" asp-anti-forgery="true" class="w-100 bg-white p-3 mt-3 border" method="post">
+            <div class="form-row">
+                <div class="col-md-12">
+                    <div class="mb-2 ml-3" asp-validation-summary="All"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Name" for="type-name">Name</label>
+                        <input asp-for="Name" type="text" class="form-control" id="type-name"
+                        aria-describedby="product-type" placeholder="Enter a type name">
+                        <small id="product-category-help" class="form-text text-muted">
+                        e.g: Xiaomi
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label asp-for="Category" for="product-category">Category</label>
+                            <select asp-for="Category" id="product-category" class="form-control">
+                                <option selected>Choose...</option>
+                            </select>
+                            <small id="product-category" class="form-text text-muted">
+                            Don't find what you want? <a asp-controller="Categories" asp-action="Create">create a new category</a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label asp-for="Description" for="category-description">Description</label>
+                        <textarea asp-for="Description" class="form-control" id="category-description"
+                        rows="3" maxlength="500"></textarea>
+                        <small id="category-description-help" class="form-text text-muted">
+                        max: 500 characters
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row d-flex justify-content-end">
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+@section scripts{
+    <script src="~/js/category.js"></script>
+}

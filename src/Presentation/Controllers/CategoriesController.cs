@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Infrastructure.Services;
@@ -27,22 +31,52 @@ namespace Presentation.Controllers
         {
             return View();
         }
-    
+        
+        [HttpGet]
+        public async Task<ActionResult<List<ProductCategory>>> OnGet()
+        {
+            try
+            {
+                var response = await _service.GetAllProductsCategoriesAsync();
+                return response;
+            }
+            catch(Exception error)
+            {
+                throw;
+            }
+        }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPost(CategoryModel model)
         {
-            if(!ModelState.IsValid)
+            try
             {
-                return View(model);
+                if(!ModelState.IsValid)
+                {
+                    return View("Create", model);
+                }
+
+                ProductCategory category = new ProductCategory();
+                category.Name = model.Name.Trim();
+
+                if(!String.IsNullOrEmpty(model.Description))
+                {
+                    category.Description = model.Description.Trim();
+                }
+
+                category.CreatedBy = "169C551E-D350-4B14-8842-FC0DF70DFB12";
+                category.UpdatedBy = "169C551E-D350-4B14-8842-FC0DF70DFB12";
+
+                await _service.CreateCategory(category);
+
+                return RedirectToAction(actionName: "Index", controllerName: "Home");
             }
-
-            ProductCategory category = new ProductCategory();
-            category.Name = model.Name.Trim();
-            category.Description = model.Description.Trim();
-
-            await _service.CreateCategory(category);
-
-            return View("Home");
+            catch(Exception error)
+            {
+                throw;
+                //return View("Error" ,new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = error.Message });
+            }
         }
     }
 }
