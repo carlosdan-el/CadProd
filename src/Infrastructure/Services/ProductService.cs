@@ -22,7 +22,7 @@ namespace Infrastructure.Services
         {
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "";
+                string query = "SELECT * FROM tbProduct WITH (NOLOCK)";
                 var response = await connection.QueryAsync<Product>(query);
                 return response.ToList();
             }
@@ -32,7 +32,7 @@ namespace Infrastructure.Services
         {
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "";
+                string query = $"SELECT * FROM tbProduct WITH (NOLOCK) WHERE Id = {id}";
                 var response = await connection.QueryFirstAsync<Product>(query);
                 return response;
             }
@@ -51,8 +51,9 @@ namespace Infrastructure.Services
                     SizeId = product.SizeId,
                     Price = product.Price,
                     Tags = product.Tags,
-                    CreatedBy = "1",
-                    UpdatedBy = "1" 
+                    ImagePath = product.ImagePath,
+                    CreatedBy = product.CreatedBy,
+                    UpdatedBy = product.UpdatedBy
                 };
 
                 var result = await connection.ExecuteAsync(query, data, 
@@ -60,5 +61,36 @@ namespace Infrastructure.Services
                 return result;
             }
         }
+    
+        public async Task UpdateProductAsync(Product product)
+        {
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var query = "SPUpdateProduct";
+                var data = new {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    CategoryId = product.CategoryId,
+                    TypeId = product.TypeId,
+                    SizeId = product.SizeId,
+                    Price = product.Price,
+                    Tags = product.Tags,
+                    UpdatedBy = product.UpdatedBy
+                };
+                await connection.ExecuteAsync(query, data,
+                commandType: CommandType.StoredProcedure);
+            }
+        }
+    
+        public async Task DeleteProductAsync(string id)
+        {
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = $"DELETE FROM tbProduct WHERE Id = {id}";
+                await connection.ExecuteAsync(query);
+            }
+        }
+
     }
 }

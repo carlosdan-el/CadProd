@@ -28,11 +28,22 @@ namespace Infrastructure.Services
             }
         }
     
+        public async Task<List<ProductSizeReport>> GetAllProductSizeViewAsync()
+        {
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SPGETProductSize";
+                var response = await connection.QueryAsync<ProductSizeReport>(query,
+                commandType: CommandType.StoredProcedure);
+                return response.ToList();
+            }
+        }
+
         public async Task<ProductSize> GetProductSizeByIdAsync(string id)
         {
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = $"";
+                string query = $"SELECT * FROM tbProductSize WITH (NOLOCK) WHERE Id = {id}";
                 var response = await connection.QueryFirstAsync<ProductSize>(query);
                 return response;
             }
@@ -54,5 +65,32 @@ namespace Infrastructure.Services
                 return response;
             }
         }
+    
+        public async Task UpdateProductSizeAsync(ProductSize size)
+        {
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var query = "SPUpdateProductSize";
+                var data = new {
+                    Id = size.Id,
+                    Name = size.Name,
+                    Description = size.Description,
+                    UpdatedBy = size.UpdatedBy
+                };
+
+                await connection.ExecuteAsync(query, data,
+                commandType: CommandType.StoredProcedure);
+            }
+        }
+    
+        public async Task DeleteProductSizeAsync(string id)
+        {
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = $"DELETE FROM tbProductSize WHERE Id = {id}";
+                await connection.ExecuteAsync(query);
+            }
+        }
+
     }
 }

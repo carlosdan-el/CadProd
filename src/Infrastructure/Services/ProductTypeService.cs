@@ -19,28 +19,39 @@ namespace Infrastructure.Services
             .GetConnectionString("DatabaseConnection");
         }
 
-        public async Task<List<ProductType>> GetAllProductTypes()
+        public async Task<List<ProductType>> GetAllProductTypesAsync()
         {
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "";
+                string query = "SELECT * FROM tbProductType WITH (NOLOCK)";
                 var response = await connection.QueryAsync<ProductType>(query);
                 return response.ToList(); 
             }
         }
     
-        public async Task<ProductType> GetProductTypeById(string id)
+        public async Task<List<ProductTypeReport>> GetAllProductTypesViewAsync()
         {
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "";
+                string query = "SPGetProductTypesView";
+                var response = await connection.QueryAsync<ProductTypeReport>(query,
+                commandType: CommandType.StoredProcedure);
+                return response.ToList(); 
+            }
+        }
+    
+        public async Task<ProductType> GetProductTypeByIdAsync(string id)
+        {
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = $"SELECT * FROM tbProductType WITH (NOLOCK) WHERE Id = {id}";
                 var response = await connection
                 .QueryFirstAsync<ProductType>(query);
                 return response;
             }
         }
 
-        public async Task<List<ProductType>> GetProductTypesByCategoryId(string id)
+        public async Task<List<ProductType>> GetProductTypesByCategoryIdAsync(string id)
         {
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -50,7 +61,7 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<int> CreateProductType(ProductType type)
+        public async Task<int> CreateProductTypeAsync(ProductType type)
         {
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -67,5 +78,32 @@ namespace Infrastructure.Services
                 return response;
             }
         }
+    
+        public async Task UpdateProducTypeAsync(ProductType type)
+        {
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var query = "SPUpdateProductType";
+                var data = new {
+                    Id = type.Id,
+                    Name = type.Name,
+                    ProductCategoryId = type.ProductCategoryId,
+                    Description = type.Description,
+                    UpdatedBy = type.UpdatedBy
+                };
+                await connection.ExecuteAsync(query, data,
+                commandType: CommandType.StoredProcedure);
+            }
+        }
+    
+        public async Task DeleteProductTypeAsync(string id)
+        {
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = $"DELETE FROM tbProductType WHERE Id = {id}";
+                await connection.ExecuteAsync(query);
+            }
+        }
+    
     }
 }
