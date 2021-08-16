@@ -56,18 +56,76 @@ namespace Presentation.Controllers
             }
         }
         
+        public IActionResult Edit([FromQuery] string id)
+        {
+            try
+            {
+                if(!string.IsNullOrEmpty(id))
+                {
+                    return View("Edit");
+                }
+
+                return View("Create");
+            }
+            catch(Exception error)
+            {
+                ErrorViewModel log = new ErrorViewModel();
+                log.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+                log.Message = error.Message;
+                log.Trace = error.ToString();
+
+                return View("Error", log);
+            }
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<ProductCategory>>> OnGet()
         {
             try
             {
-                var response = await _service.GetAllProductsCategoriesAsync();
+               var response = await _service.GetAllProductsCategoriesAsync();
                 return Ok(response);
             }
             catch(Exception error)
             {
                 return BadRequest(new {
                     Message = error.Message,
+                    Code = 400,
+                    Log = error.ToString()
+                });
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ProductCategory>> OnGetById([FromQuery] string id)
+        {
+            try
+            {
+                var response = await _service.GetProductCategoryByIdAsync(id);
+                return Ok(response);
+            }
+            catch(Exception error)
+            {
+                return BadRequest(new {
+                    Message = error.Message,
+                    Code = 400,
+                    Log = error.ToString()
+                });
+            }
+        }
+
+        [HttpGet] 
+        public async Task<ActionResult<List<ProductCategory>>> OnGetCategoriesView()
+        {
+            try
+            {
+                var response = await _service.GetAllGetProductCategoryViewAsync();
+                return Ok(response);
+            }
+            catch(Exception error)
+            {
+                return BadRequest(new {
+                    Message = error.Message, 
                     Code = 400,
                     Log = error.ToString()
                 });
@@ -96,7 +154,7 @@ namespace Presentation.Controllers
                 category.CreatedBy = "169C551E-D350-4B14-8842-FC0DF70DFB12";
                 category.UpdatedBy = category.CreatedBy;
 
-                await _service.CreateCategory(category);
+                await _service.CreateCategoryAsync(category);
 
                 return RedirectToAction(actionName: "Index", controllerName: "Home");
             }
@@ -109,5 +167,59 @@ namespace Presentation.Controllers
                 });    
             }
         }
+    
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OnPut(CategoryModel model)
+        {
+            try
+            {
+                if(!ModelState.IsValid)
+                {
+                    return View("Edit", model);
+                }
+
+                ProductCategory product = new ProductCategory();
+
+                product.Id = model.Id;
+                product.Name = model.Name;
+                product.Description = model.Description;
+                product.UpdatedBy = "169C551E-D350-4B14-8842-FC0DF70DFB12";
+
+                await _service.UpdateCategoryProductAsync(product);
+
+                return RedirectToAction(actionName: "Index", controllerName: "Categories");
+
+            }
+            catch(Exception error)
+            {
+                ErrorViewModel log = new ErrorViewModel();
+                log.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+                log.Message = error.Message;
+                log.Trace = error.ToString();
+                return View("Error", log);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> OnDelete([FromQuery] string id)
+        {
+            try{
+                await _service.DeleteCategoryProductAsync(id);
+                return Ok(new {
+                    Message = "Record deleted wit success",
+                    Code =  200
+                });
+            }
+            catch(Exception error)
+            {
+                return BadRequest(new {
+                    Message = error.Message,
+                    Code = 400,
+                    Log = error.ToString()
+                });
+            }
+        }
+
     }
 }
